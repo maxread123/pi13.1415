@@ -1,0 +1,417 @@
+Zadatak 1: 
+ 
+class Pismo: 
+    """docstring for Pismo""" 
+    def __init__(self, tezina, adresa): 
+        self.tezina = tezina 
+        self.adresa = adresa 
+    def posalji(self): 
+        print("Pismo tezine {}g se salje na adresu {}.".format(self.tezina, self.adresa)) 
+ 
+ 
+class VrijednosnoPismo(): 
+    """docstring for VrijednosnoPismo""" 
+    def __init__(self, tezina, adresa, vrijednost): 
+        Pismo.__init__(self, tezina, adresa) 
+        self.vrijednost = vrijednost 
+    def posalji(self, otkupnina = 0): 
+        if otkupnina == 0: 
+            Pismo.posalji(self) 
+        else: 
+            print("Pismo tezine {}g i vrijednosti {}kn".format(self.tezina, self.vrijednost), 
+             "se salje na adresu {} s otkupninom {:.2f}kn.".format( 
+                self.adresa, self.izracunajNaknadu(otkupnina))) 
+ 
+    def izracunajNaknadu(self, otkupnina): 
+        if 1 <= otkupnina <= 100: 
+            return 9 
+        else: 
+            return 0.1 * otkupnina 
+ 
+if __name__=="__main__": 
+    p = Pismo(100, "J.J.Strossmayera 122, Osijek") 
+    vp = VrijednosnoPismo(50, "J.J.Strossmayera 50, Osijek", 150) 
+    p.posalji() 
+    vp.posalji(101) 
+    vp.posalji(20) 
+    print(rez)  
+ 
+Zadatak 2: 
+ 
+def NZD(x, y): #zeleno prvo je docstring iza >>>je doctest 
+    """(int,int) -> int 
+    Racuna najveci zajedncki djelitelj  
+     
+    >>> print(NZD(9,27)) 
+    9 
+ 
+    """ 
+    djelitelji_x=[] 
+    djelitelji_y=[] 
+    for i in range(x,0,-1):         
+        if x%i == 0: 
+            djelitelji_x.append(i) 
+    for i in range(y,0,-1): 
+        if y%i == 0: 
+            djelitelji_y.append(i) 
+    djelitelji_x.sort(key = None, reverse = True) 
+    djelitelji_y.sort(key = None, reverse = True) 
+    for dj_x in djelitelji_x:   #Ide od najveceg prema najmanjem, za svaki dj_x provjeri sve dj_y 
+        for dj_y in djelitelji_y: 
+            if dj_x == dj_y: 
+                return dj_x 
+def NZV(x,y): 
+    """(int, int) -> int 
+    Racuna najmanji zajednicki visekratnik 
+ 
+    """ 
+    import math 
+    if x==y: 
+        return x 
+    elif x%y == 0: 
+        return x 
+    elif y%x == 0: 
+        return y 
+     
+    faktor_x = {} 
+    faktor_y = {} 
+    temp_x = x 
+    i = 2 
+    while (i!=x+1):         
+        if temp_x == 1: 
+            break 
+        if i not in faktor_x: 
+            faktor_x[i] = 0 
+        if temp_x % i==0: 
+            faktor_x[i] += 1 
+            temp_x = temp_x / i 
+        else: 
+            i+=1 
+    temp_y = y 
+    i = 2 
+    while (i!=y+1):     
+        if temp_y == 1: 
+            break 
+        if i not in faktor_y: 
+            faktor_y[i] = 0 
+        if temp_y % i == 0: 
+            faktor_y[i] += 1 
+            temp_y = temp_y / i 
+        else: 
+            i+=1 
+    rez = 1 
+    iskoristeni = [] 
+    for key_x in faktor_x: 
+        if faktor_x[key_x] != 0: 
+            if key_x in faktor_y: 
+                if faktor_y[key_x] > faktor_x[key_x]: 
+                    rez = rez * pow(key_x, faktor_y[key_x]) 
+                    iskoristeni.append(key_x) 
+                else: 
+                    rez = rez * pow(key_x, faktor_x[key_x]) 
+                    iskoristeni.append(key_x)                
+            else: 
+                rez = rez * pow(key_x, faktor_x[key_x]) 
+                iskoristeni.append(key_x) 
+    for key_y in faktor_y: 
+        if key_y in iskoristeni: 
+            continue 
+        if faktor_y[key_y] != 0: 
+            rez = rez * pow(key_y, faktor_y[key_y]) 
+    return rez         
+ 
+#Drugi nacin   
+def NZV2(x,y): 
+    """(int,int) -> int 
+    Računa najmanji zajednicki visekratnik 
+    """ 
+    veci = x 
+    if y> veci: 
+        veci = y 
+    for i in range(veci,x*y+1): 
+        if i%x == 0 and i%y == 0: 
+            return i 
+broj1 = NZD(7,49) 
+broj2 = NZV(1024,126436) 
+print(broj1,broj2) 
+ 
+if __name__ == '__main__': 
+    import doctest 
+    doctest.testmod() 
+ 
+import pismeni_zad2 
+import unittest 
+ 
+class TestirajNZV(unittest.TestCase): 
+    def testNZV(self): 
+        rez1 = pismeni_zad2.NZV(10,12) 
+        ocekivani_rez1 = 60 
+        rez2 = pismeni_zad2.NZV(7,49) 
+        ocekivani_rez2 = 49 
+        rez3 = pismeni_zad2.NZV(100,10) 
+        ocekivani_rez3 = 100 
+        self.assertEqual(rez1,ocekivani_rez1) 
+        self.assertEqual(rez2, ocekivani_rez2) 
+        self.assertEqual(rez3, ocekivani_rez3) 
+     
+         
+ 
+if __name__ == '__main__': 
+    unittest.main() 
+Page Break
+ 
+Zadatak 1: 
+ 
+import random 
+ulaz = None 
+n = None 
+while n == None: 
+    try: 
+        ulaz = input("Unesite prirodan broj:") 
+        n = int(ulaz) 
+        if n<=0: 
+            raise ValueError("%d nije prirodan broj."%n) 
+            n=None            
+    except ValueError: 
+            print("%s nije cijeli broj."%ulaz) 
+             
+def generiraj_sfere(broj): 
+    sfere = [] 
+    for i in range(0,broj): 
+        x = random.randint(-10,10) 
+        y= random.randint(-10,10) 
+        z=random.randint(-10,10) 
+        r = random.randint(1,5) 
+        sfera=(x,y,z,r) 
+        sfere.append(sfera) 
+    return sfere 
+def funkcija(): 
+    import math 
+    sfere = generiraj_sfere(n) 
+    rijecnik = {} 
+    rijecnik["preklapanje"] = [] 
+    rijecnik["kolizija"] = [] 
+    rijecnik["nema preklapanja"] = [] 
+    glavna_sfera = (5,5,5,3) 
+    for sf in sfere: 
+        udaljenost = math.sqrt(pow((sf[0]-5),2)+pow((sf[1]-5),2)+pow((sf[2]-5),2)) 
+        zbroj_radiusa = sf[3] + 3 
+        if udaljenost > zbroj_radiusa: 
+            rijecnik["nema preklapanja"].append(sf) 
+        elif udaljenost== zbroj_radiusa: 
+            rijecnik["kolizija"].append(sf) 
+        elif udaljenost < zbroj_radiusa: 
+            rijecnik["preklapanje"].append(sf) 
+    print(rijecnik) 
+    a = len(rijecnik["preklapanje"]) 
+    b = len(rijecnik["kolizija"]) 
+    c = len(rijecnik["nema preklapanja"]) 
+    if (a>b)&(a>c): 
+        return ("preklapanje:",rijecnik["preklapanje"]) 
+    if (b > a) & (b > c): 
+        return ("kolizija:", rijecnik["kolizija"]) 
+    if (c > a) & (c > b): 
+        return ("nema preklapanja :", rijecnik["nema preklapanja"]) 
+ 
+print(funkcija()) 
+Page Break
+ 
+Zadatak 3: 
+ 
+class Vlak: 
+    """ 
+    Klasa koja definira vlak s određenim brojem vagona. 
+    """ 
+    def __init__(self, broj_vagona = 0): 
+        """(Vlak, int) -> NoneType 
+        >>> v=Vlak(3) 
+        >>> v.broj_vagona 
+        3 
+        """ 
+        self.broj_vagona = broj_vagona 
+    def vozi(self, pocetna, zavrsna, km): 
+        """(Vlak, string, string, int) -> NoneType 
+        Metoda koja ispisuje odakle dokle putuje vlak te koliko km je prešao 
+        >>> v = Vlak(5) 
+        >>> v.vozi("Osijek", "Nasice", 70) 
+        Vlak je od mjesta Osijek do mjesta Nasice presao 70 km. 
+        """         
+        print("Vlak je od mjesta "+pocetna+" do mjesta "+zavrsna+" presao %d km." %km) 
+ 
+class Putnicki_vlak(Vlak): 
+    """ 
+    Klasa koja nasljeđuje Vlak te ima dvije dodatne metode, 
+    ukrcaj i iskrcaj i jedan dodatni atribut broj putnika. 
+    """ 
+    broj_ukrcavanja = 0 
+    def __init__(self, broj_vagona = 0, broj_putnika = 0): 
+        """ (Putnicki_vlak, int, int) -> NoneType 
+        >>> v = Putnicki_vlak(5,100) 
+        >>> v.broj_vagona 
+        5 
+        >>> v.broj_putnika 
+        100 
+        """ 
+         
+        self.broj_vagona = broj_vagona 
+        self.broj_putnika = broj_putnika 
+        self.ukrcano = 0 
+        self.iskrcano = 0 
+    def ukrcaj(self, ukrcani): 
+        """ (Putnicki_vlak, int) -> NoneType 
+        >>> v = Putnicki_vlak(5,100) 
+        >>> v.ukrcaj(50) 
+        >>> v.broj_putnika 
+        150 
+        """ 
+         
+        self.broj_putnika += ukrcani 
+        self.ukrcano += ukrcani 
+        Putnicki_vlak.broj_ukrcavanja += 1 
+    def iskrcaj(self, iskrcani): 
+        """ (Putnicki_vlak, int) -> NoneType 
+        >>> v = Putnicki_vlak(5,100) 
+        >>> v.iskrcaj(50) 
+        >>> v.broj_putnika 
+        50 
+        >>> v.iskrcaj(60) 
+        Nema iskrcavanja, nema nas dosta. 
+        """ 
+        if self.broj_putnika<iskrcani: 
+            print("Nema iskrcavanja, nema nas dosta.") 
+        else: 
+            self.broj_putnika -= iskrcani 
+            self.iskrcano -= iskrcani 
+    def vozi(self, pocetna, zavrsna, km, izborni = False): 
+        """(Putnicki_vlak, string, string, int, boolean) -> NoneType 
+        Metoda koja ispisuje odakle dokle putuje vlak te koliko km je prešao 
+        >>> v = Putnicki_vlak(5, 100) 
+        >>> v.vozi("Osijek", "Nasice", 70, True) 
+        Vlak je od mjesta Osijek do mjesta Nasice presao 70 km. 
+        Ukupno se iskrcalo 0 putnika, a ukrcalo 0 putnika 
+        """ 
+        if izborni == False: 
+            Vlak.vozi(self, pocetna, zavrsna, km) 
+            #print("Vlak je od mjesta "+pocetna+" do mjesta "+zavrsna+" presao %d km." %km) 
+        else: 
+            Vlak.vozi(self, pocetna, zavrsna, km) 
+            print("Ukupno se iskrcalo %d putnika, a ukrcalo %d putnika" %(self.ukrcano,self.iskrcano)) 
+             
+#proba = Vlak(5) 
+#proba2 = Putnicki_vlak(5,20) 
+#proba.vozi("osijek","nasice",70) 
+#proba2.ukrcaj(10) 
+#proba2.vozi("osijek","nasice",70, True) 
+ 
+Zadatak 4: 
+ 
+def sortiraj(): 
+    f = open("imenik.txt",'r') #r-samo za čitanje, w- samo za pisanje(svaki puta obriše staru i napravi novu), a-za dodavanje u već postojeću datoteku 
+    podaci = [] 
+    for line in f: 
+        ime_prezime, telefon, e_mail = line.split(';') 
+        podaci.append((ime_prezime,telefon,e_mail)) 
+        podaci.sort(key = lambda tup: tup[0]) #tup[0] zato da sortira po imenu, da je tup[1] bilo bi po broju telefona 
+    f.close() 
+    g = open("imenik_abecedno.txt", 'w') 
+    for kontakt in podaci: 
+        kon = kontakt[0] + ";" + kontakt[1] + ";" + kontakt[2] 
+        g.write(kon) 
+    g.close() 
+     
+def po_broju(znamenke): 
+    f = open("imenik.txt",'r') 
+    podaci = [] 
+    for line in f: 
+        ime_prezime, telefon, e_mail = line.split(';') 
+        podaci.append((ime_prezime,telefon,e_mail))        
+    f.close() 
+    znam = "("+znamenke+")" 
+    for kontakt in podaci: 
+        if znam in kontakt[1]: 
+            print(kontakt[0] + ";" + kontakt[1]) 
+def po_emailu(domena): 
+    f = open("imenik.txt",'r') 
+    podaci = [] 
+    for line in f: 
+        ime_prezime, telefon, e_mail = line.split(';') 
+        podaci.append((ime_prezime,telefon,e_mail)) 
+    f.close() 
+    for kontakt in podaci: 
+        if domena in kontakt[2]: 
+            print(kontakt[0]+";"+kontakt[1]+";"+kontakt[2]) 
+         
+sortiraj() 
+po_broju("031") 
+po_emailu("hotmail.com") 
+ 
+MARKO: 
+ 
+class Pismo: 
+    """docstring for Pismo""" 
+    def __init__(self, tezina, adresa): 
+        self.tezina = tezina 
+        self.adresa = adresa 
+    def posalji(self): 
+        print("Pismo tezine {}g se salje na adresu {}.".format(self.tezina, self.adresa)) 
+ 
+ 
+class VrijednosnoPismo(): 
+    """docstring for VrijednosnoPismo""" 
+    def __init__(self, tezina, adresa, vrijednost): 
+        Pismo.__init__(self, tezina, adresa) 
+        self.vrijednost = vrijednost 
+    def posalji(self, otkupnina = 0): 
+        if otkupnina == 0: 
+            Pismo.posalji(self) 
+        else: 
+            print("Pismo tezine {}g i vrijednosti {}kn".format(self.tezina, self.vrijednost), 
+             "se salje na adresu {} s otkupninom {:.2f}kn.".format( 
+                self.adresa, self.izracunajNaknadu(otkupnina))) 
+ 
+    def izracunajNaknadu(self, otkupnina): 
+        if 1 <= otkupnina <= 100: 
+            return 9 
+        else: 
+            return 0.1 * otkupnina 
+ 
+if __name__=="__main__": 
+    p = Pismo(100, "J.J.Strossmayera 122, Osijek") 
+    vp = VrijednosnoPismo(50, "J.J.Strossmayera 50, Osijek", 150) 
+    p.posalji() 
+    vp.posalji(101) 
+    vp.posalji(20) 
+    print(rez) 
+ 
+ 
+import marko4 
+import unittest 
+#Ne znam kako bi se u unittestu testirale posalji() metode jer one samo ispisuju na ekran... 
+#pa sam testirao samo jesu li svi atributi tocno postavljeni 
+class TestirajMarko4(unittest.TestCase): 
+    def testPismo__init__(self): 
+        rez = marko4.Pismo(100, "J.J.Strossmayera 122, Osijek") 
+        ocekivani_tezina = 100 
+        ocekivani_adresa = "J.J.Strossmayera 122, Osijek" 
+        self.assertEqual(rez.tezina, ocekivani_tezina) 
+        self.assertEqual(rez.adresa, ocekivani_adresa) 
+    def testVrijednosnoPismo__init__(self): 
+        rez = marko4.VrijednosnoPismo(100, "J.J.Strossmayera 122, Osijek", 50) 
+        ocekivani_tezina = 100 
+        ocekivani_adresa = "J.J.Strossmayera 122, Osijek" 
+        ocekivani_vrijednost = 50 
+        self.assertEqual(rez.tezina, ocekivani_tezina) 
+        self.assertEqual(rez.adresa, ocekivani_adresa) 
+        self.assertEqual(rez.vrijednost, ocekivani_vrijednost) 
+    def testIzracunajNaknadu(self): 
+        test1 = marko4.VrijednosnoPismo(100, "J.J.Strossmayera 122, Osijek", 50) 
+        rez1 = test1.izracunajNaknadu(20) 
+        ocekivani_rez1 = 9 
+        self.assertEqual(rez1, ocekivani_rez1) 
+        test2 = marko4.VrijednosnoPismo(100, "J.J.Strossmayera 122, Osijek", 50) 
+        rez2 = test2.izracunajNaknadu(300) 
+        ocekivani_rez2 = 30 
+        self.assertEqual(rez2, ocekivani_rez2) 
+if __name__ == '__main__': 
+    unittest.main() 
+ 
